@@ -4,11 +4,15 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 export default function Header() {
   const [user, setUser] = useState(null);
   const router = useRouter();
-
+  const pathname = usePathname();
+  const getLinkClass = (path: string) => {
+    return `text-white ${pathname === path ? 'font-semibold text-blue-400 border-b-2 border-blue-400 ' : 'hover:text-blue-400'}`;
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -38,11 +42,11 @@ export default function Header() {
   return (
     <header className="bg-gray-800 py-4 border-b flex justify-center">
       <nav className="flex gap-4 items-center">
-        <Link href="/" className="text-white font-semibold">APIs de la NASA</Link>
-        <Link href="/space" className="text-white">L'Espace</Link>
-        <Link href="/terre" className="text-white">La Terre</Link>
-        <Link href="/objets" className="text-white">Objets Proches</Link>
-        <Link href="/mars" className="text-white">Mars</Link>
+        <Link href="/" className={getLinkClass('/')}>APIs de la NASA</Link>
+        <Link href="/space" className={getLinkClass('/space')}>L'Espace</Link>
+        <Link href="/terre" className={getLinkClass('/terre')}>La Terre</Link>
+        <Link href="/objets" className={getLinkClass('/objets')}>Objets Proches</Link>
+        <Link href="/mars" className={getLinkClass('/mars')}>Mars</Link>
 
         {user ? (
           <div className="relative group">

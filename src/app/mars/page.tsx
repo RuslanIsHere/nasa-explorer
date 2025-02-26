@@ -1,7 +1,6 @@
 'use client';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import { useState } from "react";
+import Head from "next/head";
+import { useState, useEffect } from "react";
 
 
 const apiKey = "6ScFWJkC8Gbsy1o0DlnKKUGkNAVpGYq7Rup5drN3";
@@ -40,12 +39,17 @@ export default function MarsPage() {
     }
 };
 
+useEffect(() => {
+    fetchMarsPhotos();
+}, []);
+
 return (
     <>
-    <Header />
-    <div className="container mx-auto p-5 text-white">
-    <h1 className="text-center text-2xl font-bold">Mars Rover Photos</h1>
-    <div className="bg-gray-800 p-5 rounded-lg shadow-lg">
+    <Head>Mars Rover Photos</Head>
+    <main className='bg-gray-800 text-white text-center'>
+    <div className="container mx-auto p-5">
+    <h1 className="text-2xl font-bold">Mars Rover Photos</h1>
+    <div className="p-5 rounded-lg shadow-lg">
         <label className="block">Choisissez un rover:</label>
         <select value={rover} onChange={(e) => setRover(e.target.value)} className="w-full p-2 rounded text-black">
             <option value="curiosity">Curiosity</option>
@@ -93,11 +97,11 @@ return (
                 </div>
             ))
         ) : (
-            <p className="text-center">Aucune photo trouvée</p>
+            <p className="text-center col-span-3">Aucune photo trouvée</p>
         )}
     </div>
     </div>
-    <Footer />
+    </main>
     </>
     );
 }

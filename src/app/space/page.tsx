@@ -1,7 +1,9 @@
 'use client';
+
+import Head from 'next/head';
 import { useState, useEffect } from 'react';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+import { supabase } from '@/lib/supabaseClient';
+
 const apiKey="6ScFWJkC8Gbsy1o0DlnKKUGkNAVpGYq7Rup5drN3";
 
 interface ApodData {
@@ -50,51 +52,54 @@ export default function Space() {
 
     return (
         <>
-        <Header />
-        <div className="bg-gray-800 container p-5 text-white text-center">
-            <div className="py-5 border rounded shadow-sm">
+        <Head>
+            Astronomy Picture of the Day
+        </Head>
+        <main className="bg-gray-800 text-white text-center py-10">
+        <div className=" container p-5">
+
             <p className="lead px-4 mb-4">
                 <strong>L'API "Astronomy Picture of the Day" (APOD)</strong> de la NASA offre une image astronomique quotidienne, accompagnée d'une explication.
             </p>
-            <form className="w-50 mx-auto" onSubmit={handleSubmit}>
+
+            <form className="w-50 mx-auto p-5" onSubmit={handleSubmit}>
                 <div className="mb-3 text-center">
-                <label className="form-label fs-4 fw-bold text-white">
-                Sélectionnez une date :
-                </label>
-                <input
-                    type="date"
-                    className="form-control"
-                    value={selectedDate}
-                    min="1995-06-16"
-                    max={new Date().toISOString().split("T")[0]}
-                    onChange={handleDateChange}
-                />
+                    <label className="block text-lg form-label fs-4 fw-bold text-white">
+                    Sélectionnez une date :
+                    </label>
+                    <input
+                        type="date"
+                        className="text-black px-4 py-2 rounded-lg form-control  focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        value={selectedDate}
+                        min="1995-06-16"
+                        max={new Date().toISOString().split("T")[0]}
+                        onChange={handleDateChange}
+                    />
                 </div>
-                <button type="submit" className="btn btn-primary w-100">Envoyer</button>
+                <button type="submit" className="bg-blue-600 px-10 py-3 font-semibold rounded-lg hover:bg-blue-700 transition-colors duration-300">Envoyer</button>
             </form>
-            </div>
+        
             {error && <p className="text-danger text-center">{error}</p>}
             {apodData && (
-                <div className="container py-4 border rounded shadow-sm">
-                    <h2 className="title text-center pt-4">
+                <div className="container py-4  rounded-xl shadow-sm">
+                    <h2 className="text-3xl font-bold text-center pt-4">
                         Astronomy Picture of the Day: {apodData.date}
                     </h2>
-                    <div className="row">
-                        <div className="col-12 col-md-8">
-                            <img className="img-fluid" style={{ width: "100%" }} alt={apodData.title} src={apodData.hdurl} />
+                    <div className="bg-gray-900 grid grid-cols-1 md:grid-cols-2 gap-6 mt-4 rounded-xl">
+                        <div className="flex justify-center md:justify-start">
+                            <img className="w-full h-auto rounded-lg shadow-md m-4"  alt={apodData.title} src={apodData.hdurl} />
                         </div>
-                        <div className="col-12 col-md-4 d-flex">
-                            <div>
-                                <h5 className="card-title">{apodData.title}</h5>
-                                <p className="card-text">Date : {apodData.date}</p>
-                                <p className="card-text">Description : {apodData.explanation}</p>
-                            </div>
+                        <div className="flex flex-col p-4">
+                            <h5 className="text-lg font-bold">{apodData.title}</h5>
+                            <p className="card-text">Date : {apodData.date}</p>
+                            <p className="card-text">Description : {apodData.explanation}</p>
                         </div>
                     </div>
                 </div>
             )}
         </div>
-        <Footer />
+        </main>
+        
         </>
     );
 }
