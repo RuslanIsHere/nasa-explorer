@@ -19,3 +19,18 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.card {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-radius: 8px; /* Закругление углов */
+  transition: transform 0.2s; /* Плавный эффект при наведении */
+}
+
+.card:hover {
+  transform: scale(1.05); /* Увеличение карточки при наведении */
+}
