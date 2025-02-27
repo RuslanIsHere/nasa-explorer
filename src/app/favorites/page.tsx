@@ -33,7 +33,7 @@ export default function FavoritesPage() {
                 if (data) {
                     setFavorites(data);
                 }
-            } catch (err: any) {
+            } catch (err: unknown) {
                 setError(err.message);
             } finally {
                 setLoading(false);

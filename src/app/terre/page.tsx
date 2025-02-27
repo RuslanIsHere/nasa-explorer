@@ -7,7 +7,7 @@ const apiKey = "6ScFWJkC8Gbsy1o0DlnKKUGkNAVpGYq7Rup5drN3";
 
 export default function Terre() {
     const [date, setDate] = useState<string>('');
-    const [images, setImages] = useState<any[]>([]);
+    const [images, setImages] = useState<unknown[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [title, setTitle] = useState<string>('Images de la Terre en temps réel');
 
@@ -34,7 +34,7 @@ const fetchTerre = async () => {
     } else {
         setImages(data);
     }
-    } catch (error: any) {
+    } catch (error: unknown) {
         setError(error.message);
     }
 };
@@ -54,7 +54,7 @@ const fetchTerreByDate = async (selectedDate: string) => {
         setTitle(`Images de la Terre à la date choisie : ${selectedDate}`);
         setImages(data);
         }
-    } catch (error: any) {
+    } catch (error: unknown) {
         setError(error.message);
     }
 };
@@ -78,7 +78,7 @@ return (
     <div className="container mx-auto p-5">
         <div className="py-5">
 			<p className="lead px-4 mb-4 text-white">
-				<strong>L'API EPIC (Earth Polychromatic Imaging Camera)</strong> fournit des informations sur les images quotidiennes collectées par l'instrument EPIC du satellite DSCOVR.
+				<strong>L&apos;API EPIC (Earth Polychromatic Imaging Camera)</strong> fournit des informations sur les images quotidiennes collectées par l'instrument EPIC du satellite DSCOVR.
 				<br />
 				Ainsi, vous pouvez sélectionner une date dans cette champ pour obtenir les images correspondantes.
 			</p>
@@ -104,7 +104,7 @@ return (
         {error && <div className="col-12 text-center"><p className="text-danger">{error}</p></div>}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4  rounded shadow-sm" id="terreResult">
           {images.length > 0 ? (
-            images.map((t: any) => {
+            images.map((t: unknown) => {
               const date = new Date(t.date);
               const year = date.getFullYear();
               const month = String(date.getMonth() + 1).padStart(2, '0');

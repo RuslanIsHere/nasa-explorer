@@ -30,7 +30,7 @@ export default function Home() {
         <main className="bg-gray-800 text-white text-center py-10">
             <h1 className="text-4xl font-bold">Explorez l'Univers avec les API de la NASA</h1>
             <p className="mt-4 text-gray-300">
-                Découvrez des images de l'espace, surveillez les objets proches de la Terre et explorez les missions martiennes grâce aux API de la NASA.
+                Découvrez des images de l&apos;espace, surveillez les objets proches de la Terre et explorez les missions martiennes grâce aux API de la NASA.
             </p>
             <div className='flex justify-center text-center py-10'>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4">

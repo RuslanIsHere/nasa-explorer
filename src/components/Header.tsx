@@ -43,7 +43,7 @@ export default function Header() {
     <header className="bg-gray-800 py-4 border-b flex justify-center">
       <nav className="flex gap-4 items-center">
         <Link href="/" className={getLinkClass('/')}>APIs de la NASA</Link>
-        <Link href="/space" className={getLinkClass('/space')}>L'Espace</Link>
+        <Link href="/space" className={getLinkClass('/space')}>L&apos;Espace</Link>
         <Link href="/terre" className={getLinkClass('/terre')}>La Terre</Link>
         <Link href="/objets" className={getLinkClass('/objets')}>Objets Proches</Link>
         <Link href="/mars" className={getLinkClass('/mars')}>Mars</Link>
