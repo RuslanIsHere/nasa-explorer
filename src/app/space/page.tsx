@@ -2,6 +2,7 @@
 
 import Head from 'next/head';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 
 const apiKey="6ScFWJkC8Gbsy1o0DlnKKUGkNAVpGYq7Rup5drN3";
@@ -17,8 +18,17 @@ export default function Space() {
     const [apodData, setApodData] = useState<ApodData | null>(null);
     const [selectedDate, setSelectedDate] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
+    const router = useRouter();
 
     useEffect(() => {
+        const checkAuth = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) {
+                router.push('/auth');
+            }
+        };
+        checkAuth();
+
         const today = new Date().toISOString().split("T")[0];
         setSelectedDate(today);
         fetchApod(today);
@@ -48,6 +58,26 @@ export default function Space() {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         fetchApod(selectedDate);
+    };
+
+    const addToFavorites = async (imageUrl: string) => {
+        const { data: { user } } = await supabase.auth.getUser();
+    
+        if (!user) {
+            alert('Vous devez être connecté pour ajouter aux favoris.');
+            return;
+        }
+    
+        const { error } = await supabase
+            .from('favorites')
+            .insert([{ user_id: user.id, image_url: imageUrl }]);
+    
+        if (error) {
+            console.error('Erreur:', error);
+            alert('Erreur lors de l\'ajout aux favoris.');
+        } else {
+            alert('Ajouté aux favoris!');
+        }
     };
 
     return (
@@ -93,6 +123,12 @@ export default function Space() {
                             <h5 className="text-lg font-bold">{apodData.title}</h5>
                             <p className="card-text">Date : {apodData.date}</p>
                             <p className="card-text">Description : {apodData.explanation}</p>
+                            <button
+                            onClick={() => addToFavorites(apodData.hdurl)}
+                            className="bg-blue-600 text-white px-4 py-2 rounded-lg mt-4 hover:bg-blue-700 transition-colors duration-300"
+                            >
+                                Ajouter aux favoris
+                            </button>
                         </div>
                     </div>
                 </div>

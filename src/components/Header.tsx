@@ -47,6 +47,7 @@ export default function Header() {
         <Link href="/terre" className={getLinkClass('/terre')}>La Terre</Link>
         <Link href="/objets" className={getLinkClass('/objets')}>Objets Proches</Link>
         <Link href="/mars" className={getLinkClass('/mars')}>Mars</Link>
+        <Link href="/favorites" className={getLinkClass('/favorites')}>Favorites</Link>
 
         {user ? (
           <div className="relative group">
