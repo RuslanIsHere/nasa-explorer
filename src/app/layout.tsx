@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header"; 
 import Footer from "@/components/Footer";
-import { usePathname } from 'next/navigation';
+import LayoutWrapper from '@/components/LayoutWrapper'
 
 export const metadata: Metadata = {
   title: "NASA Explorer", 
@@ -14,15 +14,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname();
-  const isAuthPage = pathname === '/auth';
-
   return (
     <html lang="en">
       <body className="antialiased">
-        {!isAuthPage && <Header />}
-        <main>{children}</main>
-        {!isAuthPage && <Footer />}
+        <LayoutWrapper>{children}</LayoutWrapper>
       </body>
     </html>
   );
