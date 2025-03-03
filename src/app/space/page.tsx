@@ -46,8 +46,8 @@ export default function Space() {
             setApodData(data);
             setError(null);
         } catch (err) {
-        setError((err as Error).message);
-        setApodData(null);
+            setError((err as Error).message);
+            setApodData(null);
         }
     };
 
@@ -89,7 +89,7 @@ export default function Space() {
         <div className=" container p-5">
 
             <p className="lead px-4 mb-4">
-                <strong>L'API Astronomy Picture of the Day (APOD)</strong> de la NASA offre une image astronomique quotidienne, accompagnée d'une explication.
+                <strong>L\'API Astronomy Picture of the Day (APOD)</strong> de la NASA offre une image astronomique quotidienne, accompagnée d\'une explication.
             </p>
 
             <form className="w-50 mx-auto p-5" onSubmit={handleSubmit}>

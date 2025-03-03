@@ -87,7 +87,7 @@ return (
     <div className="container mx-auto p-5">
         <div className="py-5">
 			<p className="lead px-4 mb-4 text-white">
-				<strong>L&apos;API EPIC (Earth Polychromatic Imaging Camera)</strong> fournit des informations sur les images quotidiennes collectées par l'instrument EPIC du satellite DSCOVR.
+				<strong>L&apos;API EPIC (Earth Polychromatic Imaging Camera)</strong> fournit des informations sur les images quotidiennes collectées par l\'instrument EPIC du satellite DSCOVR.
 				<br />
 				Ainsi, vous pouvez sélectionner une date dans cette champ pour obtenir les images correspondantes.
 			</p>
