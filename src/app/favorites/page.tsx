@@ -37,7 +37,7 @@ export default function FavoritesPage() {
                 if (error instanceof Error) {
                     setError(error.message);
                 } else {
-                    setError('An unknown error occurred');
+                    setError('Error');
                 }
             } finally {
                 setLoading(false);
