@@ -28,7 +28,7 @@ export default function Home() {
             API de la NASA
         </Head>
         <main className="bg-gray-800 text-white text-center py-10">
-            <h1 className="text-4xl font-bold">Explorez l\'Univers avec les API de la NASA</h1>
+            <h1 className="text-4xl font-bold">Explorez l&apos;Univers avec les API de la NASA</h1>
             <p className="mt-4 text-gray-300">
                 Découvrez des images de l&apos;espace, surveillez les objets proches de la Terre et explorez les missions martiennes grâce aux API de la NASA.
             </p>
