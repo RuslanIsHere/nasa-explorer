@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { useState, useEffect } from 'react';
 
 
+
 const apiKey = "6ScFWJkC8Gbsy1o0DlnKKUGkNAVpGYq7Rup5drN3";
 
 export default function Terre() {
@@ -34,8 +35,12 @@ const fetchTerre = async () => {
     } else {
         setImages(data);
     }
-    } catch (error: unknown) {
-        setError(error.message);
+    } catch (error) {
+        if (error instanceof Error) {
+            setError(error.message);
+        } else {
+            setError('An unknown error occurred');
+        }
     }
 };
 
@@ -54,8 +59,12 @@ const fetchTerreByDate = async (selectedDate: string) => {
         setTitle(`Images de la Terre à la date choisie : ${selectedDate}`);
         setImages(data);
         }
-    } catch (error: unknown) {
-        setError(error.message);
+    } catch (error) {
+        if (error instanceof Error) {
+            setError(error.message);
+        } else {
+            setError('An unknown error occurred');
+        }
     }
 };
 
@@ -103,32 +112,31 @@ return (
         <h2 className="text-3xl font-bold text-center p-4 text-white">{title}</h2>
         {error && <div className="col-12 text-center"><p className="text-danger">{error}</p></div>}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4  rounded shadow-sm" id="terreResult">
-          {images.length > 0 ? (
-            images.map((t: unknown) => {
-              const date = new Date(t.date);
-              const year = date.getFullYear();
-              const month = String(date.getMonth() + 1).padStart(2, '0');
-              const day = String(date.getDate()).padStart(2, '0');
-              const imageUrl = `https://epic.gsfc.nasa.gov/archive/natural/${year}/${month}/${day}/png/${t.image}.png`;
-              return (
-                <div key={t.image} className="bg-gray-900 rounded-lg shadow-md overflow-hidden">
-                    <img className="rounded-xl w-full h-100  p-4 " alt={t.caption} src={imageUrl} />
-                    <div className="p-4">
-                      <h5 className="text-lg font-semibold">Date : {t.date}</h5>
-                    </div>
-                  
+            {images.length > 0 ? (
+                images.map((t: unknown) => {
+                    const date = new Date(t.date);
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const imageUrl = `https://epic.gsfc.nasa.gov/archive/natural/${year}/${month}/${day}/png/${t.image}.png`;
+                    return (
+                        <div key={t.image} className="bg-gray-900 rounded-lg shadow-md overflow-hidden">
+                                <img className="rounded-xl w-full h-100  p-4 " alt={t.caption} src={imageUrl} />
+                                <div className="p-4">
+                                    <h5 className="text-lg font-semibold">Date : {t.date}</h5>
+                                </div>
+                        </div>
+                    );
+                })
+            ) : (
+                <div className="col-span-full text-center">
+                    <p className="text-red-500">Aucune information trouvée</p>
                 </div>
-              );
-            })
-          ) : (
-            <div className="col-span-full text-center">
-              <p className="text-red-500">Aucune information trouvée</p>
-            </div>
-          )}
+            )}
         </div>
-      </div>
-      </main>
-      
+    </div>
+    </main>
+
     </>
-  );
+    );
 }

@@ -19,7 +19,7 @@ export default function FavoritesPage() {
             try {
                 const { data: { user } } = await supabase.auth.getUser();
                 if (!user) {
-                    setError("Пользователь не авторизован");
+                    setError("Pas authoris");
                     setLoading(false);
                     return;
                 }
