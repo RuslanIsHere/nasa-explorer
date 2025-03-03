@@ -6,8 +6,15 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 
+type User = {
+  // Define the properties of the User type here
+  id: string;
+  email: string;
+  // Add other properties as needed
+};
+
 export default function Header() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
   const pathname = usePathname();
   const getLinkClass = (path: string) => {
@@ -17,14 +24,14 @@ export default function Header() {
   useEffect(() => {
     const fetchUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
+      setUser(user as User | null);
     };
 
     fetchUser();
 
   
     const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user ?? null);
+      setUser(session?.user as User | null) ;
     });
 
     return () => {

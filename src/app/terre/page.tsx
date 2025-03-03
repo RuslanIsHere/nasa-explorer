@@ -6,9 +6,15 @@ import { useState, useEffect } from 'react';
 
 const apiKey = "6ScFWJkC8Gbsy1o0DlnKKUGkNAVpGYq7Rup5drN3";
 
+type ImageData = {
+    date: string;
+    image: string;
+    caption: string;
+};
+
 export default function Terre() {
     const [date, setDate] = useState<string>('');
-    const [images, setImages] = useState<unknown[]>([]);
+    const [images, setImages] = useState<ImageData[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [title, setTitle] = useState<string>('Images de la Terre en temps réel');
 
@@ -113,7 +119,7 @@ return (
         {error && <div className="col-12 text-center"><p className="text-danger">{error}</p></div>}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4  rounded shadow-sm" id="terreResult">
             {images.length > 0 ? (
-                images.map((t: unknown) => {
+                images.map((t: ImageData) => {
                     const date = new Date(t.date);
                     const year = date.getFullYear();
                     const month = String(date.getMonth() + 1).padStart(2, '0');
