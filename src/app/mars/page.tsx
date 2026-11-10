@@ -1,107 +1,46 @@
-'use client';
-import Head from "next/head";
-import { useState, useEffect } from "react";
+import type { Metadata } from "next";
+import { Suspense } from "react";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { PhotoGridSkeleton } from "@/components/ui/PhotoGridSkeleton";
+import { getLatestSol } from "@/features/mars/api";
+import { MarsFilters } from "@/features/mars/components/MarsFilters";
+import { MarsGallery } from "@/features/mars/components/MarsGallery";
+import { findCamera, findRover } from "@/features/mars/rovers";
 
+export const metadata: Metadata = { title: "Mars" };
 
-const apiKey = "6ScFWJkC8Gbsy1o0DlnKKUGkNAVpGYq7Rup5drN3";
-
-type Photo = {
-    img_src: string;
-    rover: { name: string };
-    camera: { full_name: string };
-    earth_date: string;
-    sol: number;
+type MarsPageProps = {
+  searchParams: Promise<{
+    rover?: string | string[];
+    camera?: string | string[];
+    sol?: string | string[];
+    page?: string | string[];
+  }>;
 };
 
-export default function MarsPage() {
-    const [rover, setRover] = useState("curiosity");
-    const [sol, setSol] = useState(1000);
-    const [camera, setCamera] = useState("FHAZ");
-    const [photos, setPhotos] = useState<Photo[]>([]);
-    const [error, setError] = useState("");
+function parsePositiveInteger(value: string | string[] | undefined): number | null {
+  return typeof value === "string" && /^\d+$/.test(value) ? Number(value) : null;
+}
 
-    const fetchMarsPhotos = async () => {
-    if (!rover || !sol || !camera) {
-        setError("Veuillez remplir tous les champs du formulaire");
-        return;
-    }
+export default async function MarsPage({ searchParams }: MarsPageProps) {
+  const params = await searchParams;
+  const rover = findRover(params.rover);
+  const camera = findCamera(rover, params.camera);
+  const sol = parsePositiveInteger(params.sol) ?? (await getLatestSol(rover));
+  const page = parsePositiveInteger(params.page) || 1;
+  const filtersKey = `${rover.id}-${camera?.id}-${sol}`;
 
-    try {
-        const response = await fetch(
-            `https://api.nasa.gov/mars-photos/api/v1/rovers/${rover}/photos?sol=${sol}&camera=${camera}&api_key=${apiKey}`
-        );
-        if (!response.ok) throw new Error("Erreur lors du chargement de l'API");
-        const data = await response.json();
-        setPhotos(data.photos);
-        setError("");
-    } catch (err) {
-        setError((err as Error).message);
-    }
-};
-
-useEffect(() => {
-    fetchMarsPhotos();
-}, []);
-
-return (
-    <>
-    <Head>Mars Rover Photos</Head>
-    <main className='bg-gray-800 text-white text-center'>
-    <div className="container mx-auto p-5">
-    <h1 className="text-2xl font-bold">Mars Rover Photos</h1>
-    <div className="p-5 rounded-lg shadow-lg">
-        <label className="block">Choisissez un rover:</label>
-        <select value={rover} onChange={(e) => setRover(e.target.value)} className="w-full p-2 rounded text-black">
-            <option value="curiosity">Curiosity</option>
-            <option value="opportunity">Opportunity</option>
-            <option value="spirit">Spirit</option>
-        </select>
-
-        <label className="block mt-2">Entrez une date martienne (sol):</label>
-        <input
-            type="number"
-            value={sol}
-            onChange={(e) => setSol(Number(e.target.value))}
-            className="w-full p-2 rounded text-black"
-        />
-
-        <label className="block mt-2">Choisissez un type de caméra:</label>
-        <select value={camera} onChange={(e) => setCamera(e.target.value)} className="w-full p-2 rounded text-black">
-            <option value="FHAZ">Front Hazard Avoidance Camera</option>
-            <option value="RHAZ">Rear Hazard Avoidance Camera</option>
-            <option value="MAST">Mast Camera</option>
-            <option value="CHEMCAM">Chemistry and Camera Complex</option>
-            <option value="MAHLI">Mars Hand Lens Imager</option>
-            <option value="MARDI">Mars Descent Imager</option>
-            <option value="NAVCAM">Navigation Camera</option>
-            <option value="PANCAM">Panoramic Camera</option>
-            <option value="MINITES">Miniature Thermal Emission Spectrometer</option>
-        </select>
-
-        <button onClick={fetchMarsPhotos} className="mt-4 w-full bg-blue-500 p-2 rounded text-white">
-            Envoyer
-        </button>
+  return (
+    <div className="mx-auto max-w-6xl px-4 py-10">
+      <PageHeader
+        eyebrow="Mars raw images"
+        title="Les photos des rovers"
+        description="Les images brutes envoyées par les rovers, sol après sol. Un sol est un jour martien."
+      />
+      <MarsFilters key={filtersKey} roverId={rover.id} cameraId={camera?.id} sol={sol} />
+      <Suspense key={`${filtersKey}-${page}`} fallback={<PhotoGridSkeleton />}>
+        <MarsGallery rover={rover} camera={camera} sol={sol} page={page} />
+      </Suspense>
     </div>
-
-    {error && <p className="text-red-500 text-center mt-4">{error}</p>}
-
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5">
-        {photos.length > 0 ? (
-            photos.map((photo, index) => (
-                <div key={index} className="bg-gray-900 p-4 rounded-lg shadow-lg">
-                    <img src={photo.img_src} alt="Mars" className="w-full h-64 object-cover rounded" />
-                    <p className="mt-2">Rover: {photo.rover.name}</p>
-                    <p>Camera: {photo.camera.full_name}</p>
-                    <p>Date(Terre): {photo.earth_date}</p>
-                    <p>Date(Mars Sol): {photo.sol}</p>
-                </div>
-            ))
-        ) : (
-            <p className="text-center col-span-3">Aucune photo trouvée</p>
-        )}
-    </div>
-    </div>
-    </main>
-    </>
-    );
+  );
 }

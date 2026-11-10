@@ -1,36 +1,38 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-ink: #090c13;
+  --color-surface: #11151f;
+  --color-raised: #1a2030;
+  --color-line: #2a3142;
+  --color-star: #f3f1ea;
+  --color-muted: #a3acbd;
+  --color-accent: #ff7a45;
+  --color-accent-strong: #ff9a70;
+  --color-danger: #ff6b6b;
+
+  --font-sans: var(--font-archivo), system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-ink text-star font-sans antialiased;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent;
+  }
+
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.8);
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-.card {
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  border-radius: 8px; /* Закругление углов */
-  transition: transform 0.2s; /* Плавный эффект при наведении */
-}
-
-.card:hover {
-  transform: scale(1.05); /* Увеличение карточки при наведении */
+@utility eyebrow {
+  @apply font-mono text-xs tracking-widest text-accent uppercase;
 }

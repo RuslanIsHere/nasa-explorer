@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NASA Explorer
 
-## Getting Started
+Application Next.js pour explorer les données publiques de la NASA : l'image astronomique du jour, la Terre vue par la caméra EPIC, les astéroïdes proches et les photos brutes des rovers martiens. Les images préférées sont gardées dans le navigateur.
 
-First, run the development server:
+## Démarrage
 
 ```bash
+npm install
+cp .env.example .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Renseignez `NASA_API_KEY` dans `.env.local` avec une clé gratuite obtenue sur [api.nasa.gov](https://api.nasa.gov). Sans clé, l'application utilise `DEMO_KEY`, dont la limite de requêtes est très basse.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Commande        | Rôle                        |
+| --------------- | --------------------------- |
+| `npm run dev`   | Serveur de développement    |
+| `npm run build` | Build de production         |
+| `npm start`     | Lance le build de production |
+| `npm run lint`  | Vérification ESLint         |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Structure
 
-## Learn More
+```
+src/
+├─ app/         Routes : pages, layout, erreurs
+├─ features/    Une fonctionnalité par dossier : api.ts, types.ts, components/
+├─ components/  Composants partagés : layout/ et ui/
+└─ lib/         Utilitaires : dates, fetch, HTML, variables d'environnement
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Choix techniques
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Server Components** : les données sont chargées côté serveur, la clé NASA ne part donc jamais au navigateur.
+- **État dans l'URL** : `/space?date=2025-01-01` se partage, et le bouton retour du navigateur fonctionne.
+- **`localStorage` pour les favoris** : pas de compte ni de base de données. Le hook `useFavorites` isole ce stockage.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Sources de données
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Page         | Source                                                   | Remarque                                          |
+| ------------ | -------------------------------------------------------- | ------------------------------------------------- |
+| `/space`     | API JSON de `science.nasa.gov`                           | L'API `planetary/apod` ne renvoie plus que des images de remplacement |
+| `/earth`     | `epic.gsfc.nasa.gov`                                     | Sans clé                                          |
+| `/asteroids` | `api.nasa.gov/neo` (NeoWs)                               | Nécessite `NASA_API_KEY`                          |
+| `/mars`      | Flux des galeries `mars.nasa.gov`                        | Non documenté : peut changer sans préavis         |
